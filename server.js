@@ -6,37 +6,33 @@ import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import path from "path";
 import fs from "fs";
-import { connectDB } from "./config/db.js"; 
+import { connectDB } from "./config/db.js";
 
-dotenv.config(); 
-connectDB(); 
+dotenv.config();
+connectDB();
 
 const app = express();
-
 
 const uploadDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+app.use(express.json());
 
-app.use(express.json()); 
-//app.use(cors()); 
-
-const corsOptions={
-  origin:process.env.FRONTEND_URL,
-  methods:["GET",'POST','PUT','DELETE'],
-  allowedHeaders:['Content-Type',"Athorization"],
+const corsOptions = {
+  origin: process.env.FRONTEND_URL, 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true 
 };
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions)); // CORS
+app.options("*", cors(corsOptions)); // Preflight request
 
-app.use("/uploads", express.static(uploadDir)); 
-
-
+app.use("/uploads", express.static(uploadDir));
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 
-
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🔥 Server running on port ${PORT}`));
