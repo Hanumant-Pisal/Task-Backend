@@ -21,14 +21,15 @@ if (!fs.existsSync(uploadDir)) {
 app.use(express.json());
 
 const corsOptions = {
-  origin: [process.env.FRONTEND_URL, process.env.FRONTEND_URL + "/"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-};
-
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Preflight request
+    origin: process.env.FRONTEND_URL,  
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],  
+    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow specific headers
+    credentials: true  // Allow cookies to be sent with requests
+  };
+  
+  // Use the CORS middleware
+  app.use(cors(corsOptions));
+  app.use(express.urlencoded({ extended: true }));
 
 
 app.use("/uploads", express.static(uploadDir));
