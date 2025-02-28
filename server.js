@@ -21,12 +21,15 @@ if (!fs.existsSync(uploadDir)) {
 
 
 app.use(express.json()); 
-app.use(cors()); 
+//app.use(cors()); 
 
-app.use(cors({
-  origin:"http://localhost:5173",
-  credentials:true
-}));
+const corsOptions={
+  origin:process.env.FRONTEND_URL,
+  methods:["GET",'POST','PUT','DELETE'],
+  allowedHeaders:['Content-Type',"Athorization"],
+};
+
+app.use(cors(corsOptions))
 
 app.use("/uploads", express.static(uploadDir)); 
 
