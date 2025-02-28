@@ -21,14 +21,15 @@ if (!fs.existsSync(uploadDir)) {
 app.use(express.json());
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, 
+  origin: [process.env.FRONTEND_URL, process.env.FRONTEND_URL + "/"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true 
+  credentials: true
 };
 
-app.use(cors(corsOptions)); // CORS
+app.use(cors(corsOptions));
 app.options("*", cors(corsOptions)); // Preflight request
+
 
 app.use("/uploads", express.static(uploadDir));
 app.use("/api/auth", authRoutes);
